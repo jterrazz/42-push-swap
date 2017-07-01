@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/14 17:34:59 by jterrazz          #+#    #+#             */
-/*   Updated: 2017/07/01 14:13:37 by jterrazz         ###   ########.fr       */
+/*   Updated: 2017/07/01 14:28:03 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,9 @@ void resolver_simple(t_list_int **stack_a, t_list_int **stack_b, t_todo *todo)
 			if (try_switch_extremes(*stack_a, stack_a, todo)
 				|| (i_min && try_switch_firsts(*stack_a, i_min, stack_a, todo)))
 				i_min = 0;
-			else
+			else if (!is_in_order(*stack_a))
 				place_in_top(stack_a, i_min, todo, 'a');
+			make_todo(stack_a, stack_b, todo);
 			if (is_in_order(*stack_a))
 				break ;
 			list_push(stack_b, stack_a, "pb\n", todo);
