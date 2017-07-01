@@ -1,0 +1,153 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   moves.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/06/07 16:23:23 by jterrazz          #+#    #+#             */
+/*   Updated: 2017/06/22 08:44:13 by jterrazz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "push_swap.h"
+#include <stdio.h> // DEL	
+
+void make_todo(t_list_int **stack_a, t_list_int **stack_b, t_todo *todo)
+{
+	while (todo->ra > 0 && todo->rb > 0)
+	{
+		list_rotate(stack_a, "rr\n", NULL);
+		list_rotate(stack_b, NULL, NULL);
+		todo->ra--;
+		todo->rb--;
+	}
+	while (todo->ra > 0)
+	{
+		list_rotate(stack_a, "ra\n", NULL);
+		todo->ra--;
+	}
+	while (todo->rb > 0)
+	{
+		list_rotate(stack_b, "rb\n", NULL);
+		todo->rb--;
+	}
+	while (todo->rra > 0 && todo->rrb > 0)
+	{
+		list_reverse_rotate(stack_a, "rrr\n", NULL);
+		list_reverse_rotate(stack_b, NULL, NULL);
+		todo->rra--;
+		todo->rrb--;
+	}
+	while (todo->rra > 0)
+	{
+		list_reverse_rotate(stack_a, "rra\n", NULL);
+		todo->rra--;
+	}
+	while (todo->rrb > 0)
+	{
+		list_reverse_rotate(stack_b, "rrb\n", NULL);
+		todo->rrb--;
+	}
+}
+
+void	list_switch_top(t_list_int **list, char *print, t_todo *todo)
+{
+	t_list_int *first;
+	t_list_int *second;
+
+	if (todo)
+		make_todo(todo->stack_a, todo->stack_b, todo);
+	first = *list;
+	*list = (*list)->next;
+	second = *list;
+	first->next = (*list)->next;
+	second->next = first;
+	*list = second;
+	if (print)
+		ft_putstr(print);
+}
+// prevoir pas de rotation
+void	list_rotate(t_list_int **list, char *print, t_todo *todo)
+{
+	t_list_int *first;
+	t_list_int *temp;
+
+	if (todo && print)
+	{
+		if (!ft_strcmp(print, "ra\n") && todo->rra > 0)
+			todo->rra--;
+		else if (!ft_strcmp(print, "rb\n") && todo->rrb > 0)
+			todo->rrb--;
+		if (!ft_strcmp(print, "ra\n"))
+			todo->ra++;
+		else if (!ft_strcmp(print, "rb\n"))
+			todo->rb++;
+	}
+	else
+	{
+		first = *list;
+		*list = (*list)->next;
+		temp = *list;
+		while (temp->next)
+			temp = temp->next;
+		temp->next = first;
+		first->next = NULL;
+		if (print)
+			ft_putstr(print);
+	}
+}
+
+void	list_reverse_rotate(t_list_int **list, char *print, t_todo *todo)
+{
+	t_list_int *last;
+	t_list_int *first;
+
+	if (todo && print)
+	{
+		if (!ft_strcmp(print, "rra\n") && todo->ra > 0)
+			todo->ra--;
+		else if (!ft_strcmp(print, "rrb\n") && todo->rb > 0)
+			todo->rb--;
+		if (!ft_strcmp(print, "rra\n"))
+			todo->rra++;
+		else if (!ft_strcmp(print, "rrb\n"))
+			todo->rrb++;
+	}
+	else
+	{
+		last = *list;
+		while (last->next->next)
+			last = last->next;
+		first = last->next;
+		last->next = NULL;
+		first->next = *list;
+		*list = first;
+		if (print)
+			ft_putstr(print);
+	}
+}
+
+void	list_push(t_list_int **dest, t_list_int **src, char *print, t_todo *todo)
+{
+	t_list_int *current;
+
+	if (!(*src))
+		return ;
+	if (todo)
+		make_todo(todo->stack_a, todo->stack_b, todo);
+	current = *src;
+	*src = (*src)->next;
+	if (!(*dest))
+	{
+		*dest = current;
+		current->next = NULL;
+	}
+	else
+	{
+		current->next = *dest;
+		*dest = current;
+	}
+	if (print)
+		ft_putstr(print);
+}
