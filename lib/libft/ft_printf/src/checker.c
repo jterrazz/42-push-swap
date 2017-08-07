@@ -1,46 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr.c                                        :+:      :+:    :+:   */
+/*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/12 13:43:27 by jterrazz          #+#    #+#             */
-/*   Updated: 2017/06/13 18:26:58 by jterrazz         ###   ########.fr       */
+/*   Created: 2017/06/03 06:39:00 by jterrazz          #+#    #+#             */
+/*   Updated: 2017/06/04 10:50:47 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-int		ft_putstr_free(char *s)
+int			is_conv(char c)
 {
-	int		i;
+	char *str;
 
-	i = 0;
-	while (s[i])
-		i++;
-	write(1, s, i);
-	free(s);
-	return (i);
+	str = CONVERSIONS;
+	while (*str)
+	{
+		if (*str == c)
+			return (1);
+		str++;
+	}
+	return (0);
 }
 
-void	ft_putstr(char const *s)
+int			is_flag(char c)
 {
-	int		i;
+	char *str;
 
-	i = 0;
-	while (s[i])
-		i++;
-	write(1, s, i);
-}
-
-int		ft_putstr_ret(char const *s)
-{
-	int		i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	write(1, s, i);
-	return (i);
+	str = FLAGS;
+	while (*str)
+	{
+		if (*str == c)
+			return (1);
+		str++;
+	}
+	return (0);
 }

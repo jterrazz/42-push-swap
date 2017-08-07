@@ -1,46 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr.c                                        :+:      :+:    :+:   */
+/*   ft_itoa_base.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/12 13:43:27 by jterrazz          #+#    #+#             */
-/*   Updated: 2017/06/13 18:26:58 by jterrazz         ###   ########.fr       */
+/*   Created: 2017/05/22 16:50:44 by jterrazz          #+#    #+#             */
+/*   Updated: 2017/06/04 10:51:28 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-int		ft_putstr_free(char *s)
+char	*ft_itoa_base(intmax_t nb, intmax_t base, char letter)
 {
-	int		i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	write(1, s, i);
-	free(s);
-	return (i);
-}
-
-void	ft_putstr(char const *s)
-{
-	int		i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	write(1, s, i);
-}
-
-int		ft_putstr_ret(char const *s)
-{
-	int		i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	write(1, s, i);
-	return (i);
+	if (nb < 0)
+		return (ft_strjoin_free("-", ft_uitoa_base((nb * -1), base, letter),
+			0, 1));
+	else
+		return (ft_uitoa_base(nb, base, letter));
 }

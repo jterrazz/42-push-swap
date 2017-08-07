@@ -6,17 +6,11 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/14 17:34:59 by jterrazz          #+#    #+#             */
-/*   Updated: 2017/07/01 14:28:03 by jterrazz         ###   ########.fr       */
+/*   Updated: 2017/08/07 16:51:43 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-#include <stdio.h> // DEL
-
-// check all sstatic
-// check all mkaefile ok
-// check leaks
-// check norm and all header
 
 static int		try_switch_firsts(t_list_int *stack_a, int min_index,
 	t_list_int **stack_a_move, t_todo *todo)
@@ -42,7 +36,8 @@ static int		try_switch_firsts(t_list_int *stack_a, int min_index,
 	return (1);
 }
 
-static int		try_switch_extremes(t_list_int *stack_a, t_list_int **stack_a_move, t_todo *todo)
+static int		try_switch_extremes(t_list_int *stack_a,
+	t_list_int **stack_a_move, t_todo *todo)
 {
 	int			first;
 	int			last;
@@ -56,7 +51,7 @@ static int		try_switch_extremes(t_list_int *stack_a, t_list_int **stack_a_move, 
 	last = sav->value;
 	while (stack_a)
 	{
-		if (stack_a->value < last || stack_a->value < first)
+		if (stack_a->value > last || stack_a->value < first)
 			return (0);
 		stack_a = stack_a->next;
 	}
@@ -66,7 +61,7 @@ static int		try_switch_extremes(t_list_int *stack_a, t_list_int **stack_a_move, 
 }
 
 static int		try_switch_three(t_list_int *stack_a,
- 	t_list_int **stack_a_move, t_todo *todo)
+	t_list_int **stack_a_move, t_todo *todo)
 {
 	int first;
 	int second;
@@ -79,15 +74,24 @@ static int		try_switch_three(t_list_int *stack_a,
 		second = stack_a->value;
 		stack_a = stack_a->next;
 		third = stack_a->value;
-		list_switch_top(stack_a_move, "sa\n", todo);
-		list_reverse_rotate(stack_a_move, "rra\n", todo);
-		return (1);
+		if (first < second && second > third && third > first)
+		{
+			list_reverse_rotate(stack_a_move, "rra\n", todo);
+			list_switch_top(stack_a_move, "sa\n", todo);
+			return (1);
+		}
+		if (first > second && second > third && first > third)
+		{
+			list_switch_top(stack_a_move, "sa\n", todo);
+			list_reverse_rotate(stack_a_move, "rra\n", todo);
+			return (1);
+		}
 	}
 	return (0);
 }
 
-// 512 521 1 5241 21 41 4444 11
-void 	place_in_top(t_list_int **stack, int index, t_todo *todo, char c)
+void			place_in_top(t_list_int **stack, int index, t_todo *todo,
+	char c)
 {
 	int r_needed;
 	int rr_needed;
@@ -109,7 +113,8 @@ void 	place_in_top(t_list_int **stack, int index, t_todo *todo, char c)
 	}
 }
 
-void resolver_simple(t_list_int **stack_a, t_list_int **stack_b, t_todo *todo)
+void			resolver_simple(t_list_int **stack_a,
+	t_list_int **stack_b, t_todo *todo)
 {
 	int i_min;
 

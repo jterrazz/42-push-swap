@@ -29,3 +29,22 @@ char	*ft_strsub(char const *s, unsigned int start, size_t len)
 	}
 	return (new_s);
 }
+
+char	*ft_strsub_free(char *s, unsigned int start, size_t len)
+{
+	char			*new_s;
+	unsigned int	i;
+
+	i = 0;
+	new_s = ft_strnew(len);
+	if (new_s == NULL)
+		return (NULL);
+	while (i < len)
+	{
+		new_s[i] = s[start];
+		i++;
+		start++;
+	}
+	free(s);
+	return (new_s);
+}

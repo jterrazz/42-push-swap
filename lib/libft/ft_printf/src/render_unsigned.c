@@ -1,46 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr.c                                        :+:      :+:    :+:   */
+/*   render_unsigned.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/12 13:43:27 by jterrazz          #+#    #+#             */
-/*   Updated: 2017/06/13 18:26:58 by jterrazz         ###   ########.fr       */
+/*   Created: 2017/05/15 17:19:23 by jterrazz          #+#    #+#             */
+/*   Updated: 2017/06/04 10:52:42 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-int		ft_putstr_free(char *s)
+char	*render_unsigned(va_list *va, t_flags *flags)
 {
-	int		i;
+	uintmax_t	n;
+	char		*ret;
 
-	i = 0;
-	while (s[i])
-		i++;
-	write(1, s, i);
-	free(s);
-	return (i);
-}
-
-void	ft_putstr(char const *s)
-{
-	int		i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	write(1, s, i);
-}
-
-int		ft_putstr_ret(char const *s)
-{
-	int		i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	write(1, s, i);
-	return (i);
+	n = get_uintmax(va, flags);
+	if (!(ret = ft_uitoa_base(n, 10, 'a')))
+		return (NULL);
+	set_precision_number(&ret, flags, (n ? 0 : 1));
+	return (ret);
 }

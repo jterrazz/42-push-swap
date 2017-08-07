@@ -6,25 +6,22 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/08 15:39:42 by jterrazz          #+#    #+#             */
-/*   Updated: 2017/06/19 19:24:35 by jterrazz         ###   ########.fr       */
+/*   Updated: 2017/08/07 15:04:43 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-// check GNL FOLder without .git inside
-//mon printf
 
 int		arg_is_valid(char *str)
 {
 	while (*str)
 	{
-		if (*str != ' ' && *str != '+' && *str != '-' && !(*str >= '0' && *str <= '9'))
+		if (*str != ' ' && *str != '+' && *str != '-'
+			&& !(*str >= '0' && *str <= '9'))
 			return (0);
 		str++;
 	}
 	return (1);
-	// maybe check + and - inside number
-	// check if -511-44 est ok
 }
 
 int		are_in_order(t_list_int *stack_a, t_list_int *stack_b)

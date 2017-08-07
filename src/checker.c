@@ -6,17 +6,13 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/06 11:08:54 by jterrazz          #+#    #+#             */
-/*   Updated: 2017/06/14 17:41:23 by jterrazz         ###   ########.fr       */
+/*   Updated: 2017/08/07 15:06:29 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-//ADD STATICS
-//CHECK FOLDER NAMES
-// Check comments in .h
-// HCECK FOLDER NAME AND GNL FILES
 
-static void	init_mvt_tab(t_mvt mvt_tab[11])
+static void		init_mvt_tab(t_mvt mvt_tab[11])
 {
 	mvt_tab[0].str = "sa";
 	mvt_tab[0].id = sa;
@@ -42,27 +38,22 @@ static void	init_mvt_tab(t_mvt mvt_tab[11])
 	mvt_tab[10].id = rrr;
 }
 
-static int		get_fd(t_flags_args *flags)
+static void		init_run_commands(t_list_int **stack_a, t_list_int **stack_b,
+	t_flags_args *flags, char **line)
 {
-	int fd;
-
-	if (!flags->flag_file)
-		return (0);
-	fd = open(flags->filename, O_RDONLY);
-	return (fd);
+	*line = NULL;
+	show_list(*stack_a, *stack_b, flags->flag_v);
 }
 
-int				run_commands(t_list_int **stack_a, t_list_int **stack_b,
+static int		run_commands(t_list_int **stack_a, t_list_int **stack_b,
 	t_mvt mvt_tab[11], t_flags_args *flags)
 {
 	char		*line;
 	int			i;
 	int			fd;
 
-	line = NULL;
-	show_list(*stack_a, *stack_b, flags->flag_v);
-	fd = get_fd(flags);
-	if (fd < 0)
+	init_run_commands(stack_a, stack_b, flags, &line);
+	if ((fd = get_fd(flags)) < 0)
 		return (ft_error());
 	while (get_next_line(fd, &line) > 0)
 	{
@@ -70,10 +61,7 @@ int				run_commands(t_list_int **stack_a, t_list_int **stack_b,
 		while (i <= 11)
 		{
 			if (i == 11)
-			{
-				free(line);
-				return (ft_error());
-			}
+				return (free_ret(&line) + ft_error());
 			if (!ft_strcmp(mvt_tab[i].str, line))
 			{
 				disptatch_moves(stack_a, stack_b, mvt_tab[i].id);
@@ -84,9 +72,7 @@ int				run_commands(t_list_int **stack_a, t_list_int **stack_b,
 		}
 		free(line);
 	}
-	if (line)
-		free(line);
-	return (are_in_order(*stack_a, *stack_b));
+	return (free_ret(&line) + close(fd) + are_in_order(*stack_a, *stack_b));
 }
 
 int				main(int argc, char **argv)

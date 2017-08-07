@@ -1,46 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr.c                                        :+:      :+:    :+:   */
+/*   ft_uitoa_base.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/12 13:43:27 by jterrazz          #+#    #+#             */
-/*   Updated: 2017/06/13 18:26:58 by jterrazz         ###   ########.fr       */
+/*   Created: 2017/05/22 16:50:44 by jterrazz          #+#    #+#             */
+/*   Updated: 2017/06/04 10:52:09 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-int		ft_putstr_free(char *s)
+char	*ft_uitoa_base(uintmax_t nb, intmax_t base, char letter)
 {
-	int		i;
+	uintmax_t	temp;
+	int			power;
+	char		*str;
 
-	i = 0;
-	while (s[i])
-		i++;
-	write(1, s, i);
-	free(s);
-	return (i);
-}
-
-void	ft_putstr(char const *s)
-{
-	int		i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	write(1, s, i);
-}
-
-int		ft_putstr_ret(char const *s)
-{
-	int		i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	write(1, s, i);
-	return (i);
+	temp = nb;
+	power = 1;
+	while (temp /= base)
+		power++;
+	if (!(str = ft_strnew(power)))
+		return (NULL);
+	while (power--)
+	{
+		if (nb % base >= 10)
+			str[power] = nb % base - 10 + letter;
+		else
+			str[power] = nb % base + '0';
+		nb /= base;
+	}
+	return (str);
 }

@@ -6,7 +6,7 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/13 17:23:23 by jterrazz          #+#    #+#             */
-/*   Updated: 2017/07/01 14:17:19 by jterrazz         ###   ########.fr       */
+/*   Updated: 2017/08/07 15:05:39 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	str_is_number(char *str)
 	return (1);
 }
 
-void	init_todo(t_todo *todo, t_list_int **stack_a, t_list_int **stack_b)
+void		init_todo(t_todo *todo, t_list_int **stack_a, t_list_int **stack_b)
 {
 	todo->ra = 0;
 	todo->rra = 0;

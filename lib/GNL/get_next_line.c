@@ -6,15 +6,11 @@
 /*   By: jterrazz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 21:32:14 by jterrazz          #+#    #+#             */
-/*   Updated: 2017/05/08 16:16:55 by jterrazz         ###   ########.fr       */
+/*   Updated: 2017/05/11 12:21:06 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
-
-// si static buff alors read du buff sinon read
-// free tout
 
 int		join_line(char *str, char **line)
 {
@@ -29,7 +25,6 @@ int		join_line(char *str, char **line)
 	}
 	else
 		*line = str;
-	//check retur valuei
 	if (*line == NULL)
 		return (-1);
 	return (1);
@@ -37,16 +32,15 @@ int		join_line(char *str, char **line)
 
 int		cpy_buffer(t_buff *buff, char **line)
 {
-	int i;
-	char *str;
-	int ret;
+	int		i;
+	char	*str;
+	int		ret;
 
-	i = 0;
+	i = -1;
 	ret = 0;
-	str = ft_strnew(buff->buff_size);
-	if (!str)
+	if ((str = ft_strnew(buff->buff_size)) == NULL)
 		return (-1);
-	while (i < buff->buff_size)
+	while (++i < buff->buff_size)
 	{
 		if (!buff->buff[i] || buff->buff[i] == '\n')
 		{
@@ -59,68 +53,64 @@ int		cpy_buffer(t_buff *buff, char **line)
 			break ;
 		}
 		str[i] = buff->buff[i];
-		i++;
 	}
-	if (join_line(str, line) == -1) // check err
+	if (join_line(str, line) == -1)
 		return (-1);
 	return (ret);
 }
 
-int		get_next_line(const int fd, char **line)
+int		get_line(t_buff *buff, const int fd, char **line)
 {
-	int		ret;
-	static t_buff	buff;
-	int		found;
+	int				ret;
+	int				found;
 
 	ret = 1;
 	found = 0;
 	if (fd < 0 || !line)
 		return (-1);
 	*line = NULL;
-	if (buff.buff_size > 0 && cpy_buffer((&buff), line))
+	if (buff->buff_size > 0 && cpy_buffer(buff, line))
 		return (1);
 	while (!found)
 	{
-		ret = read(fd, buff.buff, BUFF_SIZE);
-		buff.buff_size = ret;
+		ret = read(fd, buff->buff, BUFF_SIZE);
+		buff->buff_size = ret;
 		if (ret < 0)
 			return (-1);
 		else if (!ret)
-		{
-			if (*line)
-				return (1);
-			else
-				return (0);
-		}
-		found = cpy_buffer((&buff), line);
+			return ((*line) ? 1 : 0);
+		found = cpy_buffer(buff, line);
 		if (found == -1)
 			return (-1);
 	}
 	return (1);
 }
 
-/* 
-// DELETE AT END !!!
-int 	main(int argc, char **argv)
+int		get_next_line(const int fd, char **line)
 {
-	char *line;
-	int fd;
-	int	ret;
-	int i = 4;
-	ret = 111;
-	if (argc == 1)
-		fd = 0;
-	else if (argc == 2)
-		fd = open(argv[1], O_RDONLY);
-	while (ret > 0 && i--)
-	{
-		ret = get_next_line(fd, &line);
-		printf("%s\n", line);
-		printf("line -> %s\n", line);
-		printf("ret  -> %d\n", ret);
-printf("\n\n");
-	}
-	return (0);
-}
+	static t_list_fd	*first_fd;
+	t_list_fd			*temp_fd;
+	t_list_fd			*new_fd;
+	t_buff				*buff;
 
-*/
+	temp_fd = first_fd;
+	while (temp_fd && temp_fd->next && temp_fd->fd != fd)
+		temp_fd = temp_fd->next;
+	if (temp_fd && temp_fd->fd == fd)
+		return (get_line(temp_fd->buff, fd, line));
+	else
+	{
+		if ((new_fd = (t_list_fd *)ft_memalloc(sizeof(t_list_fd))) == NULL)
+			return (-1);
+		new_fd->fd = fd;
+		new_fd->next = NULL;
+		if ((buff = (t_buff *)ft_memalloc(sizeof(t_buff))) == NULL)
+			return (-1);
+		new_fd->buff = buff;
+		if (first_fd)
+			temp_fd->next = new_fd;
+		else
+			first_fd = new_fd;
+		return (get_line(new_fd->buff, fd, line));
+	}
+}

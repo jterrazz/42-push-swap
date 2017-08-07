@@ -24,13 +24,16 @@ FILES = ft_lstiter.c ft_putendl.c ft_striter.c ft_strequ.c\
 	ft_itoa.c ft_memmove.c ft_strcmp.c ft_strncpy.c \
 	ft_lstadd.c ft_memset.c ft_strcpy.c ft_strnequ.c \
 	ft_lstdel.c ft_putchar.c ft_strdel.c ft_strnew.c \
-	ft_lstdelone.c ft_putchar_fd.c ft_strdup.c ft_strnstr.c 
+	ft_lstdelone.c ft_putchar_fd.c ft_strdup.c ft_strnstr.c
 
 OFILES = $(FILES:.c=.o)
 
 FLAGS = -Wall -Wextra -Werror
 
-all : $(NAME)
+all : $(NAME) makelibs
+
+makelibs:
+	make -C ft_printf
 
 $(NAME): $(OFILES)
 	@ar rc $(NAME) $(OFILES)
@@ -42,10 +45,12 @@ $(NAME): $(OFILES)
 	gcc -c $(FLAGS) -o $@ $< -I ../../includes
 
 clean:
+	@make -C ft_printf clean
 	@rm -rf $(OFILES)
 	@echo "Deleting:\n\033[33m $(OFILES)\033[0m"
 
 fclean: clean
+	@make -C ft_printf fclean
 	@rm -rf $(NAME)
 	@echo "Deleting:\n\033[33m $(NAME)\033[0m"
 

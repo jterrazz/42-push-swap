@@ -5,29 +5,41 @@
 #                                                     +:+ +:+         +:+      #
 #    By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2017/08/06 17:30:46 by jterrazz          #+#    #+#              #
-#    Updated: 2017/08/06 17:39:00 by jterrazz         ###   ########.fr        #
+#    Created: 2017/05/12 15:20:52 by jterrazz          #+#    #+#              #
+#    Updated: 2017/08/06 15:23:43 by jterrazz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = get_next_line.a
+NAME = libftprintf.a
 
-FILES = get_next_line.c ../libft/libft.a
+SRC_PATH = ./src
 
-OFILES = $(FILES:.c=.o)
+SRC_NAME = ft_printf.c \
+		   dispatch.c flags.c \
+		   ft_itoa_base.c render_char.c render_hex.c render_nbr.c \
+		   ft_uitoa_base.c \
+		   render_octal.c render_pointer.c render_str.c render_unsigned.c \
+		   get_uintmax.c get_intmax.c display.c checker.c render_double.c \
+		   flags_init.c conv_init.c
 
-FLAGS = -Wall -Wextra -Werror
 
-all : $(NAME)
+SRC = $(addprefix $(SRC_PATH)/,$(SRC_NAME))
+
+OFILES = $(SRC_NAME:.c=.o)
+
+CC = gcc
+
+CFLAGS = -Wall -Wextra -Werror
+
+all: $(NAME)
 
 $(NAME): $(OFILES)
 	@ar rc $(NAME) $(OFILES)
-	@echo "Compilation GNL:\033[92m OK\033[0m"
 	@ranlib $(NAME)
-	@echo "--> Optimisation ar rc:\033[92m OK\033[0m"
+	@echo "Compilation:\033[92m OK\033[0m"
 
-%.o: %.c
-	gcc -c $(FLAGS) -o $@ $< -I ../../includes
+%.o: $(SRC_PATH)/%.c
+	$(CC) -c $(CFLAGS) -o $@ $< -I includes -I ../../../includes
 
 clean:
 	@rm -rf $(OFILES)
@@ -37,4 +49,6 @@ fclean: clean
 	@rm -rf $(NAME)
 	@echo "Deleting:\n\033[33m $(NAME)\033[0m"
 
-re: fclean all
+re : fclean all
+
+.PHONY: all clean fclean re

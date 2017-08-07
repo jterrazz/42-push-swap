@@ -1,46 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr.c                                        :+:      :+:    :+:   */
+/*   render_octal.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/12 13:43:27 by jterrazz          #+#    #+#             */
-/*   Updated: 2017/06/13 18:26:58 by jterrazz         ###   ########.fr       */
+/*   Created: 2017/05/15 16:41:09 by jterrazz          #+#    #+#             */
+/*   Updated: 2017/06/04 10:52:32 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-int		ft_putstr_free(char *s)
+char	*render_octal(va_list *va, t_flags *flags)
 {
-	int		i;
+	char		*ret;
+	uintmax_t	nb;
 
-	i = 0;
-	while (s[i])
-		i++;
-	write(1, s, i);
-	free(s);
-	return (i);
-}
-
-void	ft_putstr(char const *s)
-{
-	int		i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	write(1, s, i);
-}
-
-int		ft_putstr_ret(char const *s)
-{
-	int		i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	write(1, s, i);
-	return (i);
+	nb = get_uintmax(va, flags);
+	if (!(ret = ft_uitoa_base(nb, 8, 'a')))
+		return (NULL);
+	set_precision_number(&ret, flags, (nb ? 0 : 1));
+	if (ret && flags->flag_hash && ret[0] != '0')
+		ret = ft_strjoin_free("0", ret, 0, 1);
+	return (ret);
 }

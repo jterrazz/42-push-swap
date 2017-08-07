@@ -6,12 +6,11 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/16 17:52:10 by jterrazz          #+#    #+#             */
-/*   Updated: 2017/06/22 15:55:28 by jterrazz         ###   ########.fr       */
+/*   Updated: 2017/08/07 16:49:49 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-#include <stdio.h> // DEL
 
 int			get_rotation_needed_for_i(int i, int max)
 {
@@ -27,10 +26,10 @@ int			get_rotation_needed_for_i(int i, int max)
 		return (rr_needed);
 }
 
-// send 2 elements at start
-int			get_b_rotation_needed(t_list_int *stack_b, int value_to_place, t_todo *todo)
+int			get_b_rotation_needed(t_list_int *stack_b, int value_to_place,
+	t_todo *todo)
 {
-	int i; // find index with closest value to VTP but under
+	int i;
 	int best_value;
 	int best_i;
 
@@ -42,7 +41,8 @@ int			get_b_rotation_needed(t_list_int *stack_b, int value_to_place, t_todo *tod
 	{
 		i++;
 		if ((best_value > value_to_place && stack_b->value < best_value) ||
-			(best_value < value_to_place && stack_b->value > best_value && stack_b->value < value_to_place))
+			(best_value < value_to_place && stack_b->value > best_value
+				&& stack_b->value < value_to_place))
 		{
 			best_value = stack_b->value;
 			best_i = i;
@@ -56,22 +56,24 @@ int			get_b_rotation_needed(t_list_int *stack_b, int value_to_place, t_todo *tod
 	return (get_rotation_needed_for_i(best_i, todo->stack_b_elements));
 }
 
-int			get_best_a_index(t_list_int *stack_a, t_list_int *stack_b, t_todo *todo)
+int			get_best_a_index(t_list_int *stack_a, t_list_int *stack_b,
+	t_todo *todo)
 {
 	int		best_i;
 	int		best_weight;
 	int		current_weight;
 	int		i;
 
-	i = 0;
 	best_i = 0;
-	best_weight = get_rotation_needed_for_i(i, todo->stack_a_elements) + get_b_rotation_needed(stack_b, stack_a->value, todo) + 1;
+	best_weight = get_rotation_needed_for_i(0, todo->stack_a_elements)
+		+ get_b_rotation_needed(stack_b, stack_a->value, todo) + 1;
 	stack_a = stack_a->next;
-	i++;
+	i = 1;
 	todo->b_top = todo->b_temp;
 	while (stack_a)
 	{
-		current_weight = get_rotation_needed_for_i(i, todo->stack_a_elements) + get_b_rotation_needed(stack_b, stack_a->value, todo) + 1;
+		current_weight = get_rotation_needed_for_i(i, todo->stack_a_elements)
+			+ get_b_rotation_needed(stack_b, stack_a->value, todo) + 1;
 		if (current_weight < best_weight)
 		{
 			best_i = i;
@@ -112,20 +114,15 @@ int			is_stack_min(t_list_int *stack_a, t_list_int *stack_b)
 	return (0);
 }
 
-void		resolver_optimized(t_list_int **stack_a, t_list_int **stack_b, t_todo *todo) // check errirs if b dont exist
+void		resolver_optimized(t_list_int **stack_a, t_list_int **stack_b,
+	t_todo *todo)
 {
-	int first;
-	int second;
-
-	first = (*stack_a)->value;
 	list_push(stack_b, stack_a, "pb\n", todo);
-	second = (*stack_a)->value;
 	list_push(stack_b, stack_a, "pb\n", todo);
 	todo->stack_b_elements += 2;
 	todo->stack_a_elements -= 2;
-	if (first < second)
-		list_rotate(stack_b, "rb\n", todo);
-	while (*stack_a && (!is_stack_min(*stack_a, *stack_b) || !is_in_order(*stack_a))) // tant que a est dans l'ordre est est min
+	while (*stack_a && (!is_stack_min(*stack_a, *stack_b)
+	|| !is_in_order(*stack_a)))
 	{
 		todo->a_top = get_best_a_index(*stack_a, *stack_b, todo);
 		place_in_top(stack_a, todo->a_top, todo, 'a');
@@ -136,5 +133,3 @@ void		resolver_optimized(t_list_int **stack_a, t_list_int **stack_b, t_todo *tod
 	}
 	place_in_top(stack_b, get_index_of_max(*stack_b), todo, 'b');
 }
-// add opti in searcher
-// check git files (rm te);

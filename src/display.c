@@ -6,12 +6,11 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/13 17:05:46 by jterrazz          #+#    #+#             */
-/*   Updated: 2017/06/14 17:26:52 by jterrazz         ###   ########.fr       */
+/*   Updated: 2017/08/07 15:05:41 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-#include <stdio.h>//delete
 
 int				ft_error(void)
 {
@@ -23,24 +22,24 @@ static void		show_line_one(t_list_int *stack, int right)
 {
 	if (right)
 	{
-		printf("|                      |");
-		printf("| %-20d |\n", stack->value);
+		ft_printf("|                      |");
+		ft_printf("| %-20d |\n", stack->value);
 	}
 	else
-		printf("| %-20d ||                      |\n", stack->value);
+		ft_printf("| %-20d ||                      |\n", stack->value);
 }
 
 static void		show_line_both(t_list_int *stack_a, t_list_int *stack_b)
 {
-	printf("| %-20d |", stack_a->value);
-	printf("| %-20d |\n", stack_b->value);
+	ft_printf("| %-20d |", stack_a->value);
+	ft_printf("| %-20d |\n", stack_b->value);
 }
 
 void			show_list(t_list_int *stack_a, t_list_int *stack_b, int print)
 {
 	if (print)
 	{
-		printf("|======= LIST A ================ LIST B =======|\n");
+		ft_printf("|======= LIST A ================ LIST B =======|\n");
 		while (stack_a || stack_b)
 		{
 			if (stack_a && stack_b)
@@ -60,6 +59,6 @@ void			show_list(t_list_int *stack_a, t_list_int *stack_b, int print)
 				stack_b = stack_b->next;
 			}
 		}
-		printf("|==============================================|\n\n");
+		ft_printf("|==============================================|\n\n");
 	}
 }

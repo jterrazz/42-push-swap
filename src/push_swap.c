@@ -6,20 +6,19 @@
 /*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/08 15:45:11 by jterrazz          #+#    #+#             */
-/*   Updated: 2017/06/22 09:56:05 by jterrazz         ###   ########.fr       */
+/*   Updated: 2017/08/06 17:47:28 by jterrazz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-// check makefile deleting dont exist
-// check arg 2 0 - 12
 
 static void			sort_stack(t_list_int **stack_a, t_list_int **stack_b)
 {
 	t_todo	todo;
 
 	init_todo(&todo, stack_a, stack_b);
+	if (is_in_order(*stack_a))
+		return ;
 	if (todo.stack_a_elements > 7)
 		resolver_optimized(stack_a, stack_b, &todo);
 	else
